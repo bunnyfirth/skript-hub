@@ -1,0 +1,3 @@
+command /trade <player>:
+    trigger:
+        open virtual chest inventory with size 9 named "&6Trade" to player

@@ -1,0 +1,2 @@
+on join:
+    broadcast "&b%player% has joined the server!"

@@ -1,0 +1,4 @@
+on jump:
+    if {doublejump::%player%} is true:
+        set player's velocity to vector(0,1.5,0)
+        send "&bDouble jump activated!" to player

@@ -1,0 +1,3 @@
+on rightclick on gold block:
+    strike lightning at player's location
+    send "&cYou triggered a trap!" to player

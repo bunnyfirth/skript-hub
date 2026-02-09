@@ -1,0 +1,3 @@
+command /balance:
+    trigger:
+        send "&aYour balance is %{money::%player%}%" to player

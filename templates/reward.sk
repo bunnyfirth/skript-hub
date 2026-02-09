@@ -1,0 +1,5 @@
+command /reward:
+    trigger:
+        give player diamond sword
+        set {coins::%player%} to 100
+        send "&6You received your reward!" to player

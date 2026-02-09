@@ -1,0 +1,4 @@
+command /day:
+    trigger:
+        set time of world to day
+        send "&eTime set to day!" to player

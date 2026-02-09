@@ -1,0 +1,4 @@
+command /ignite <player>:
+    trigger:
+        set arg-1 on fire for 5 seconds
+        send "&c%arg-1% is on fire!" to player

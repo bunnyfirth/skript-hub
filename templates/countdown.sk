@@ -1,0 +1,7 @@
+command /startcount:
+    trigger:
+        set {count} to 10
+        while {count} > 0:
+            broadcast "{count}"
+            subtract 1 from {count}
+        broadcast "&aCountdown finished!"

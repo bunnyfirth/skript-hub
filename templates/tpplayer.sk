@@ -1,0 +1,4 @@
+command /tpplayer:
+    trigger:
+        teleport target player to player
+        send "&eYou teleported %target% to your location!" to player

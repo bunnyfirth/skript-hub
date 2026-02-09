@@ -1,0 +1,4 @@
+command /firework:
+    trigger:
+        launch 5 firework rockets at player's location
+        send "&cBoom! Fireworks launched!" to player

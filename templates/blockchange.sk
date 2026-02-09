@@ -1,0 +1,3 @@
+on break of diamond block:
+    cancel event
+    send "&cYou cannot break this block!" to player

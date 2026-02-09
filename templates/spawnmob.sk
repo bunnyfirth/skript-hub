@@ -1,0 +1,4 @@
+command /spawnzombie:
+    trigger:
+        spawn 10 zombies at player's location
+        send "&cZombies incoming!" to player

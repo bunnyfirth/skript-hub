@@ -1,0 +1,3 @@
+on death of player:
+    add 1 to {level::%victim%}
+    send "&aYou gained a level!" to victim

@@ -1,0 +1,4 @@
+command /getdiamond:
+    trigger:
+        give player diamond
+        send "&bYou received a diamond!" to player

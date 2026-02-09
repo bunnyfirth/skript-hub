@@ -1,0 +1,4 @@
+on explode:
+    loop all players:
+        damage loop-player by 5
+    send "&cBoom! You got hit!" to all players

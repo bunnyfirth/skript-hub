@@ -1,0 +1,2 @@
+on spawn of boss:
+    broadcast "&cBoss has spawned! Prepare for battle!"

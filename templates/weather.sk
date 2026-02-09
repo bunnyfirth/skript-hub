@@ -1,0 +1,4 @@
+command /rain:
+    trigger:
+        set weather to rain
+        send "&bIt is now raining!" to all players

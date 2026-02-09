@@ -1,0 +1,4 @@
+command /home:
+    trigger:
+        teleport player to {home::%player%}
+        send "&eTeleported home!" to player

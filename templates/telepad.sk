@@ -1,0 +1,3 @@
+on rightclick on stone block:
+    teleport player to {pad::%clicked block%}
+    send "&eTeleported!" to player

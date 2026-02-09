@@ -1,0 +1,4 @@
+command /healme:
+    trigger:
+        set player's health to 20
+        send "&aYou have been fully healed ❤" to player

@@ -1,0 +1,4 @@
+command /givexp <player> <amount>:
+    trigger:
+        add arg-2 xp to arg-1
+        send "&aGave %arg-2% XP to %arg-1%" to player

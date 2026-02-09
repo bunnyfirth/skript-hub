@@ -1,0 +1,3 @@
+on join:
+    send "&bWelcome %player% to the server!" to player
+    broadcast "&aEveryone welcome %player%!" to all players

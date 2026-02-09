@@ -1,0 +1,4 @@
+command /vanish:
+    trigger:
+        make player invisible for 60 seconds
+        send "&7You are now invisible!" to player

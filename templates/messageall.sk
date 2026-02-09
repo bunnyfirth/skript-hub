@@ -1,0 +1,3 @@
+command /announce <text>:
+    trigger:
+        broadcast "&6[Announcement]: %text%"
