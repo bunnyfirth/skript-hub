@@ -2,64 +2,94 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Skript Templates</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Skript Idea Generator</title>
 <link rel="icon" href="icon.png" type="image/png">
 <style>
-body{font-family:Arial;background:#1b1b2f;color:#f0f0f0;padding:20px;}
-h1{color:#f39c12;} button{background:linear-gradient(to right,#f39c12,#f1c40f);border:none;padding:12px 25px;color:#fff;border-radius:50px;cursor:pointer;margin-top:10px;box-shadow:0 4px 15px rgba(243,156,18,0.5);}
-button:hover{transform:translateY(-3px);box-shadow:0 6px 20px rgba(243,156,18,0.6);}
+body { font-family: Arial; background: #1b1b2f; color: #f0f0f0; padding: 20px; }
+h1,h2{color:#f39c12;}
+select,input[type=file]{padding:8px; border-radius:6px; background:#34495e; color:#fff; border:none; margin:5px;}
+button.button-fancy{background-image: linear-gradient(to right,#f39c12,#f1c40f);border:none;padding:12px 25px;font-size:16px;color:#fff;border-radius:50px;cursor:pointer;margin-top:10px;box-shadow:0 4px 15px rgba(243,156,18,0.5); transition:all 0.3s;}
+button.button-fancy:hover{transform:translateY(-3px);box-shadow:0 6px 20px rgba(243,156,18,0.6);}
+#ideaOutput{margin-top:20px;padding:15px;background:#34495e;border-radius:8px;color:#ecf0f1;font-size:18px;}
 nav{margin-bottom:20px;} nav a{margin:5px;color:#fff;text-decoration:none;font-weight:bold;}
-#templateList{margin-top:15px;}
 </style>
 </head>
 <body>
-<h1>Skript Templates</h1>
+
+<h1>Advanced Idea Generator</h1>
 <nav>
-<a href="index.html">Home</a>
-<a href="checker.html">Checker</a>
-<a href="cheatsheet.html">Cheat Sheet</a>
-<a href="ideas.html">Idea Generator</a>
-<a href="templates.html">Templates</a>
+  <button onclick="location.href='index.html'">Home</button>
+  <button onclick="location.href='checker.html'">Checker</button>
+  <button onclick="location.href='cheatsheet.html'">Cheat Sheet</button>
+  <button onclick="location.href='ideas.html'">Idea Generator</button>
+  <button onclick="location.href='templates.html'">Templates</button>
 </nav>
 
-<div id="templateList">
-<ul id="list"></ul>
-</div>
-<button onclick="downloadTemplates()">Download All Templates</button>
+<p>Upload JSON files to add options:</p>
+<input type="file" id="jsonFiles" multiple accept=".json"><br><br>
 
-<script src="https://cdn.jsdelivr.net/npm/jszip@3.10.0/dist/jszip.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/file-saver@2.0.5/dist/FileSaver.min.js"></script>
+<label>What it is:</label>
+<select id="whatIs"></select>
+<label>Target:</label>
+<select id="target"></select>
+<label>Action:</label>
+<select id="action"></select>
+<br>
+<button class="button-fancy" onclick="generateIdea()">Generate Idea</button>
+<div id="ideaOutput">Your idea will appear here...</div>
+
 <script>
-// List of templates
-const templates = {
-    "heal.sk": "command /healme:\n    trigger:\n        set player's health to 20\n        send \"&aHealed!\" to player",
-    "teleport.sk": "command /tpplayer:\n    trigger:\n        teleport target player to player",
-    "bossfight.sk": "on spawn of boss:\n    broadcast \"Boss spawned!\"",
-    "explosion.sk": "on explode:\n    loop all players:\n        damage loop-player by 5",
-    "item.sk": "give player diamond sword",
-    "spawn.sk": "spawn 10 zombies at player's location",
-    "reward.sk": "command /reward:\n    trigger:\n        give player diamond",
-    "event.sk": "on join:\n    send \"Welcome to the server!\" to player"
+// Default options
+let jsonData={
+"WhatIs":["Command","Item","Map","Block","Spell","Boss","Event","Potion"],
+"Target":["Player","Enemy","Pet","NPC","Monster","Animal","Vehicle","Friend"],
+"Action":["Teleport","Spawn","Destroy","Give","Activate","Deactivate","Upgrade","Heal"]
 };
 
-// Display templates
-const list = document.getElementById("list");
-for(let key in templates){
-    const li=document.createElement('li');
-    li.textContent=key;
-    list.appendChild(li);
+// Handle uploaded JSON files
+document.getElementById('jsonFiles').addEventListener('change',function(e){
+    const files=e.target.files;
+    Array.from(files).forEach(file=>{
+        const reader=new FileReader();
+        reader.onload=function(){
+            try{
+                const data=JSON.parse(reader.result);
+                for(let key in data){ if(jsonData[key]) jsonData[key]=jsonData[key].concat(data[key]); }
+                populateDropdowns();
+            }catch(err){ alert("Invalid JSON: "+file.name);}
+        }
+        reader.readAsText(file);
+    });
+});
+
+// Populate dropdowns
+function populateDropdowns(){
+    const mapping={whatIs:"WhatIs", target:"Target", action:"Action"};
+    for(let id in mapping){
+        const sel=document.getElementById(id);
+        sel.innerHTML="";
+        jsonData[mapping[id]].forEach(opt=>{
+            const el=document.createElement('option'); el.textContent=opt; sel.appendChild(el);
+        });
+    }
 }
 
-// Download all as ZIP
-function downloadTemplates(){
-    const zip = new JSZip();
-    for(let key in templates){
-        zip.file(key, templates[key]);
-    }
-    zip.generateAsync({type:"blob"}).then(function(content){
-        saveAs(content,"SkriptTemplates.zip");
-    });
+// Generate readable idea
+function generateIdea(){
+    const w=document.getElementById("whatIs").value;
+    const t=document.getElementById("target").value;
+    const a=document.getElementById("action").value;
+    let idea="";
+    if(w==="Command" && a==="Teleport"){ idea=`💡 Idea: Create a command that teleports your ${t.toLowerCase()} into the void!`; }
+    else if(w==="Item" && a==="Give"){ idea=`💡 Idea: Make an item that gives your ${t.toLowerCase()} a special effect!`; }
+    else if(w==="Spell"){ idea=`💡 Idea: Cast a spell that ${a.toLowerCase()}s the ${t.toLowerCase()}.`; }
+    else{ idea=`💡 Idea: ${w} that ${a.toLowerCase()}s your ${t.toLowerCase()}.`; }
+    document.getElementById("ideaOutput").innerText=idea;
 }
+
+// Initial population
+populateDropdowns();
 </script>
 </body>
 </html>
