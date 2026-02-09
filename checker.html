@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Skript Syntax Checker</title>
+<link rel="icon" href="icon.png" type="image/png">
+<style>
+body { font-family: Arial; background:#1b1b2f; color:#f0f0f0; padding:20px; }
+h1{color:#f39c12;} textarea{width:100%;height:150px;background:#2c2c3a;color:#ecf0f1;border:none;padding:10px;border-radius:8px;font-family:monospace;}
+#output{margin-top:15px;padding:10px;border-radius:8px;background:#34495e;color:#ecf0f1;}
+.error{color:#e74c3c;font-weight:bold;}
+.ok{color:#2ecc71;font-weight:bold;}
+button{background:linear-gradient(to right,#f39c12,#f1c40f);border:none;padding:12px 25px;color:#fff;border-radius:50px;cursor:pointer;margin-top:10px;box-shadow:0 4px 15px rgba(243,156,18,0.5);}
+button:hover{transform:translateY(-3px);box-shadow:0 6px 20px rgba(243,156,18,0.6);}
+nav{margin-bottom:20px;}
+nav a{margin:5px;color:#fff;text-decoration:none;font-weight:bold;}
+</style>
+</head>
+<body>
+<h1>Skript Syntax Checker</h1>
+<nav>
+<a href="checker.html">Checker</a>
+<a href="cheatsheet.html">Cheat Sheet</a>
+<a href="ideas.html">Idea Generator</a>
+<a href="templates.html">Templates</a>
+</nav>
+<textarea id="skriptInput" placeholder="Paste your Skript code here..."></textarea><br>
+<button onclick="checkSyntax()">Check Syntax</button>
+<div id="output">Results will appear here...</div>
+
+<script>
+function checkSyntax(){
+    const code=document.getElementById("skriptInput").value;
+    let messages=[]; const lines=code.split('\n');
+    if(code.match(/!player/)) messages.push('<span class="error">❌ "!player" is invalid. Use "player" instead.</span>');
+    lines.forEach((line,i)=>{
+        if(line.includes('%') && !line.trim().startsWith('send')) messages.push(`<span class="error">❌ Line ${i+1}: %placeholders% only in messages</span>`);
+        if(line.match(/health level/)) messages.push(`<span class="error">❌ Line ${i+1}: Use "player\'s health"</span>`);
+        if(line.match(/if .* = .*$/)) messages.push(`<span class="error">❌ Line ${i+1}: Use "is" instead of "="</span>`);
+        if(line.match(/while .*player-loop\d*/)) messages.push(`<span class="error">❌ Line ${i+1}: Invalid loop syntax</span>`);
+        if(line.trim().startsWith('command /') && !line.trim().endsWith(':')) messages.push(`<span class="error">❌ Line ${i+1}: Command needs colon ":"</span>`);
+        if(/^\S/.test(line) && i>0 && lines[i-1].trim().endsWith(':') && !line.startsWith('    ')) messages.push(`<span class="error">❌ Line ${i+1}: Indent 4 spaces under block</span>`);
+        if(line.trim().startsWith('command /')) { if(i+1>=lines.length || !lines[i+1].includes('trigger:')) messages.push(`<span class="error">❌ Line ${i+2}: Command must have trigger</span>`); }
+    });
+    document.getElementById("output").innerHTML=messages.length===0?'<span class="ok">✅ No obvious syntax issues detected!</span>':messages.join('<br>');
+}
+</script>
+</body>
+</html>

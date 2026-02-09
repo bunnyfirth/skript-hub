@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Skript Templates</title>
+<link rel="icon" href="icon.png" type="image/png">
+<style>
+body{font-family:Arial;background:#1b1b2f;color:#f0f0f0;padding:20px;}
+h1{color:#f39c12;} button{background:linear-gradient(to right,#f39c12,#f1c40f);border:none;padding:12px 25px;color:#fff;border-radius:50px;cursor:pointer;margin-top:10px;box-shadow:0 4px 15px rgba(243,156,18,0.5);}
+button:hover{transform:translateY(-3px);box-shadow:0 6px 20px rgba(243,156,18,0.6);}
+nav{margin-bottom:20px;} nav a{margin:5px;color:#fff;text-decoration:none;font-weight:bold;}
+#templateList{margin-top:15px;}
+</style>
+</head>
+<body>
+<h1>Skript Templates</h1>
+<nav>
+<a href="checker.html">Checker</a>
+<a href="cheatsheet.html">Cheat Sheet</a>
+<a href="ideas.html">Idea Generator</a>
+<a href="templates.html">Templates</a>
+</nav>
+
+<div id="templateList">
+<ul id="list"></ul>
+</div>
+<button onclick="downloadTemplates()">Download All Templates</button>
+
+<script src="https://cdn.jsdelivr.net/npm/jszip@3.10.0/dist/jszip.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/file-saver@2.0.5/dist/FileSaver.min.js"></script>
+<script>
+// List of templates
+const templates = {
+    "heal.sk": "command /healme:\n    trigger:\n        set player's health to 20\n        send \"&aHealed!\" to player",
+    "teleport.sk": "command /tpplayer:\n    trigger:\n        teleport target player to player",
+    "bossfight.sk": "on spawn of boss:\n    broadcast \"Boss spawned!\"",
+    "explosion.sk": "on explode:\n    loop all players:\n        damage loop-player by 5",
+    "item.sk": "give player diamond sword",
+    "spawn.sk": "spawn 10 zombies at player's location",
+    "reward.sk": "command /reward:\n    trigger:\n        give player diamond",
+    "event.sk": "on join:\n    send \"Welcome to the server!\" to player"
+};
+
+// Display templates
+const list = document.getElementById("list");
+for(let key in templates){
+    const li=document.createElement('li');
+    li.textContent=key;
+    list.appendChild(li);
+}
+
+// Download all as ZIP
+function downloadTemplates(){
+    const zip = new JSZip();
+    for(let key in templates){
+        zip.file(key, templates[key]);
+    }
+    zip.generateAsync({type:"blob"}).then(function(content){
+        saveAs(content,"SkriptTemplates.zip");
+    });
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Skript Cheat Sheet</title>
+<link rel="icon" href="icon.png" type="image/png">
+<style>
+body{font-family:Arial;background:#1b1b2f;color:#f0f0f0;padding:20px;}
+h1,h2{color:#f39c12;}
+pre{background:#2c2c3a;padding:10px;border-radius:8px;overflow-x:auto;color:#ecf0f1;}
+nav{margin-bottom:20px;} nav a{margin:5px;color:#fff;text-decoration:none;font-weight:bold;}
+</style>
+</head>
+<body>
+
+<h1>Skript Cheat Sheet</h1>
+<nav>
+<a href="checker.html">Checker</a>
+<a href="cheatsheet.html">Cheat Sheet</a>
+<a href="ideas.html">Idea Generator</a>
+<a href="templates.html">Templates</a>
+</nav>
+
+<h2>Commands</h2>
+<pre><code>
+command /hello:
+    trigger:
+        send "Hello %player%!" to player
+</code></pre>
+
+<h2>Events</h2>
+<pre><code>
+on join:
+    send "&bWelcome %player%!" to player
+on death:
+    send "%player% died from %death cause%" to all players
+</code></pre>
+
+<h2>Variables & Loops</h2>
+<pre><code>
+set {coins::%player%} to 10
+add 5 to {coins::%player%}
+loop all players:
+    send "Hi %loop-player%" to loop-player
+</code></pre>
+
+<h2>Conditions</h2>
+<pre><code>
+if player has permission "admin":
+    send "&aYou are admin!" to player
+else:
+    send "&cNo permission!" to player
+</code></pre>
+
+<h2>Effects</h2>
+<pre><code>
+send "Hello" to player
+give player diamond sword
+set player's health to 20
+kill player
+broadcast "%player% died!"
+</code></pre>
+
+<h2>Tips</h2>
+<pre><code>
+- Always indent 4 spaces under triggers/loops/conditions
+- Use 'is' instead of '=' in if statements
+- Place %placeholders% only in send messages
+</code></pre>
+
+</body>
+</html>
