@@ -6,56 +6,67 @@
 <title>Skript Idea Generator</title>
 <link rel="icon" href="icon.png" type="image/png">
 <style>
-body { font-family: Arial; background: #1b1b2f; color: #f0f0f0; padding: 20px; }
-h1,h2{color:#f39c12;}
-select,input[type=file]{padding:8px; border-radius:6px; background:#34495e; color:#fff; border:none; margin:5px;}
-button.button-fancy{background-image: linear-gradient(to right,#f39c12,#f1c40f);border:none;padding:12px 25px;font-size:16px;color:#fff;border-radius:50px;cursor:pointer;margin-top:10px;box-shadow:0 4px 15px rgba(243,156,18,0.5); transition:all 0.3s;}
-button.button-fancy:hover{transform:translateY(-3px);box-shadow:0 6px 20px rgba(243,156,18,0.6);}
-#ideaOutput{margin-top:20px;padding:15px;background:#34495e;border-radius:8px;color:#ecf0f1;font-size:18px;}
-nav{margin-bottom:20px;} nav a{margin:5px;color:#fff;text-decoration:none;font-weight:bold;}
+/* Base styles, same as home page */
+body { font-family: Arial; background:#1b1b2f; color:#f0f0f0; padding:40px; text-align:center; }
+h1,h2 { color:#f39c12; }
+nav{ margin-bottom:50px; }
+button { display:inline-block; margin:10px; background-image: linear-gradient(to right,#f39c12,#f1c40f); border:none; padding:20px 35px; font-size:18px; color:#fff; border-radius:50px; cursor:pointer; box-shadow:0 4px 15px rgba(243,156,18,0.5); transition:all 0.3s; }
+button:hover { transform:translateY(-3px); box-shadow:0 6px 20px rgba(243,156,18,0.6);}
+select, input[type=file] { padding:12px 10px; border-radius:50px; background:#34495e; color:#fff; border:none; margin:10px; font-size:16px; }
+#ideaOutput { margin-top:30px; padding:20px; background:#34495e; border-radius:12px; color:#ecf0f1; font-size:18px; min-height:60px; }
 </style>
 </head>
 <body>
 
 <h1>Advanced Idea Generator</h1>
+
+<!-- Navigation -->
 <nav>
-  <button onclick="location.href='index.html'">Home</button>
-  <button onclick="location.href='checker.html'">Checker</button>
-  <button onclick="location.href='cheatsheet.html'">Cheat Sheet</button>
-  <button onclick="location.href='ideas.html'">Idea Generator</button>
-  <button onclick="location.href='templates.html'">Templates</button>
+<button onclick="location.href='index.html'">Home</button>
+<button onclick="location.href='checker.html'">Checker</button>
+<button onclick="location.href='cheatsheet.html'">Cheat Sheet</button>
+<button onclick="location.href='ideas.html'">Idea Generator</button>
+<button onclick="location.href='templates.html'">Templates</button>
 </nav>
 
+<!-- JSON Upload -->
 <p>Upload JSON files to add options:</p>
 <input type="file" id="jsonFiles" multiple accept=".json"><br><br>
 
+<!-- Dropdowns -->
 <label>What it is:</label>
 <select id="whatIs"></select>
 <label>Target:</label>
 <select id="target"></select>
 <label>Action:</label>
 <select id="action"></select>
-<br>
-<button class="button-fancy" onclick="generateIdea()">Generate Idea</button>
+<br><br>
+
+<!-- Generate Button -->
+<button onclick="generateIdea()">Generate Idea</button>
+
+<!-- Output -->
 <div id="ideaOutput">Your idea will appear here...</div>
 
 <script>
 // Default options
-let jsonData={
-"WhatIs":["Command","Item","Map","Block","Spell","Boss","Event","Potion"],
-"Target":["Player","Enemy","Pet","NPC","Monster","Animal","Vehicle","Friend"],
-"Action":["Teleport","Spawn","Destroy","Give","Activate","Deactivate","Upgrade","Heal"]
+let jsonData = {
+    "WhatIs":["Command","Item","Map","Block","Spell","Boss","Event","Potion"],
+    "Target":["Player","Enemy","Pet","NPC","Monster","Animal","Vehicle","Friend"],
+    "Action":["Teleport","Spawn","Destroy","Give","Activate","Deactivate","Upgrade","Heal"]
 };
 
 // Handle uploaded JSON files
-document.getElementById('jsonFiles').addEventListener('change',function(e){
-    const files=e.target.files;
-    Array.from(files).forEach(file=>{
-        const reader=new FileReader();
-        reader.onload=function(){
+document.getElementById('jsonFiles').addEventListener('change', function(e){
+    const files = e.target.files;
+    Array.from(files).forEach(file => {
+        const reader = new FileReader();
+        reader.onload = function(){
             try{
-                const data=JSON.parse(reader.result);
-                for(let key in data){ if(jsonData[key]) jsonData[key]=jsonData[key].concat(data[key]); }
+                const data = JSON.parse(reader.result);
+                for(let key in data){ 
+                    if(jsonData[key]) jsonData[key] = jsonData[key].concat(data[key]); 
+                }
                 populateDropdowns();
             }catch(err){ alert("Invalid JSON: "+file.name);}
         }
@@ -65,27 +76,34 @@ document.getElementById('jsonFiles').addEventListener('change',function(e){
 
 // Populate dropdowns
 function populateDropdowns(){
-    const mapping={whatIs:"WhatIs", target:"Target", action:"Action"};
+    const mapping = {whatIs:"WhatIs", target:"Target", action:"Action"};
     for(let id in mapping){
-        const sel=document.getElementById(id);
-        sel.innerHTML="";
+        const sel = document.getElementById(id);
+        sel.innerHTML = "";
         jsonData[mapping[id]].forEach(opt=>{
-            const el=document.createElement('option'); el.textContent=opt; sel.appendChild(el);
+            const el = document.createElement('option'); 
+            el.textContent = opt; 
+            sel.appendChild(el);
         });
     }
 }
 
 // Generate readable idea
 function generateIdea(){
-    const w=document.getElementById("whatIs").value;
-    const t=document.getElementById("target").value;
-    const a=document.getElementById("action").value;
+    const w = document.getElementById("whatIs").value;
+    const t = document.getElementById("target").value;
+    const a = document.getElementById("action").value;
     let idea="";
-    if(w==="Command" && a==="Teleport"){ idea=`💡 Idea: Create a command that teleports your ${t.toLowerCase()} into the void!`; }
-    else if(w==="Item" && a==="Give"){ idea=`💡 Idea: Make an item that gives your ${t.toLowerCase()} a special effect!`; }
-    else if(w==="Spell"){ idea=`💡 Idea: Cast a spell that ${a.toLowerCase()}s the ${t.toLowerCase()}.`; }
-    else{ idea=`💡 Idea: ${w} that ${a.toLowerCase()}s your ${t.toLowerCase()}.`; }
-    document.getElementById("ideaOutput").innerText=idea;
+    if(w==="Command" && a==="Teleport"){ 
+        idea=`💡 Idea: Create a command that teleports your ${t.toLowerCase()} into the void!`; 
+    } else if(w==="Item" && a==="Give"){ 
+        idea=`💡 Idea: Make an item that gives your ${t.toLowerCase()} a special effect!`; 
+    } else if(w==="Spell"){ 
+        idea=`💡 Idea: Cast a spell that ${a.toLowerCase()}s the ${t.toLowerCase()}.`; 
+    } else { 
+        idea=`💡 Idea: ${w} that ${a.toLowerCase()}s your ${t.toLowerCase()}.`; 
+    }
+    document.getElementById("ideaOutput").innerText = idea;
 }
 
 // Initial population
